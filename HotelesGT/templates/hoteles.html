@@ -38,7 +38,42 @@
     </div>
   </nav>
   <body>
-    <h1>BIENVENIDOS AL HOTEL</h1>
+    <h1>{{titulo}}</h1>
+    <p>Por Ciudades:</p>
+    
+    <form action="" method="GET">
+    <select name = "ciudad" class="form-select" aria-label="Default select example">
+      <option selected>Seleccione una Ciudad</option>
+      {% for cuidad in lista_ciudades %}
+      <option value="{{cuidad.identificador}}">{{cuidad.nombre}}</option>
+      {% endfor %}
+    </select><br>
+    <button type="submit" class="btn btn-secondary btn-sm">Filtrar</button>
+    </form><br>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Ciudad</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Categoría</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hotel in lista_hoteles %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{hotel.nombre}}</td>
+          <td>{{hotel.ciudad_id}}</td>
+          <td>{{hotel.telefono}}</td>
+          <td>{{hotel.categoria_id}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

@@ -27,22 +27,18 @@ class HotelAdmin(admin.ModelAdmin):
 
 class PaisAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'codigo_area')
-    list_filter = ('nombre',)
     search_fields = ('=identificador','nombre')
 
 class CiudadAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'pais_id')
-    list_filter = ('pais_id',)
     search_fields = ('=identificador','nombre')
 
 class CategoriaAdmin(admin.ModelAdmin):
     list_display = ('identificador','nombre')
-    list_filter = ('nombre',)
     search_fields = ('=identificador','nombre')
 
 class TipoHAdmin(admin.ModelAdmin):
     list_display = ('identificador','nombre')
-    list_filter = ('nombre',)
     search_fields = ('=identificador','nombre')
 
 class HabitacionAdmin(admin.ModelAdmin):
@@ -52,7 +48,6 @@ class HabitacionAdmin(admin.ModelAdmin):
 
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'apellido', 'nit', 'telefono', 'direccion')
-    list_filter = ('nombre', 'apellido')
     search_fields = ('=identificador','nombre', 'apellido')
 
 class ReservacionAdmin(admin.ModelAdmin):

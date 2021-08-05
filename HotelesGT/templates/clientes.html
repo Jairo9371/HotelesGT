@@ -38,7 +38,35 @@
     </div>
   </nav>
   <body>
-    <h1>BIENVENIDOS AL LISTADO DE CLIENTES</h1>
+    <h1>{{titulo}}</h1>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">NIT</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Dirección</th>
+          <th scope="col">Correo Electrónico</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cliente in lista_clientes %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{cliente.nombre}}</td>
+          <td>{{cliente.apellido}}</td>
+          <td>{{cliente.nit}}</td>
+          <td>{{cliente.telefono}}</td>
+          <td>{{cliente.direccion}}</td>
+          <td>{{cliente.correo_electronico}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

@@ -38,7 +38,34 @@
     </div>
   </nav>
   <body>
-    <h1>BIENVENIDOS A LAS RESERVACIONES</h1>
+    <h1>{{titulo}}</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Hotel</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reservacion in lista_reservaciones %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{reservacion.fecha}}</td>
+          <td>{{reservacion.cliente_id}}</td>
+          <td>{{reservacion.hotel_id}}</td>
+          <td>{{reservacion.description}}</td>
+          <td>{{reservacion.usuario_id}}</td>
+          <td>{{reservacion.estado}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

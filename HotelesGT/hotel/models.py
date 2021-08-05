@@ -102,6 +102,7 @@ class Cliente(models.Model):
     correo_electronico = models.EmailField(max_length = 80, default = None, null = True, verbose_name = 'Correo Electronico')
     contraseña = forms.CharField(widget = forms.PasswordInput, max_length = 50)
     
+    
     def __str__(self):
         return '{} {}'.format(self.nombre, self.apellido)
     

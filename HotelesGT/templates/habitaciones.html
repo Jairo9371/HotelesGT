@@ -38,7 +38,32 @@
     </div>
   </nav>
   <body>
-    <h1>BIENVENIDOS A LAS HABITACIONES</h1>
+    <h1>{{titulo}}</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Hotel</th>
+          <th scope="col">Tipo de Habitación</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Usuario</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for habitacion in lista_habitacion %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{habitacion.hotel_id}}</td>
+          <td>{{habitacion.tipo_id}}</td>
+          <td>{{habitacion.description}}</td>
+          <td>{{habitacion.precio}}</td>
+          <td>{{habitacion.usuario_id}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

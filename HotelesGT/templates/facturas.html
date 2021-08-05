@@ -38,8 +38,32 @@
     </div>
   </nav>
   <body>
-      <h1>BIENVENIDOS A LAS</h1>
-      <h1> FACTURAS</h1>
+    <h1>{{titulo}}</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">No.Serie</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Reservación</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for factura in lista_facturas %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{factura.no_serie}}</td>
+          <td>{{factura.fecha}}</td>
+          <td>{{factura.reservacion_id}}</td>
+          <td>{{factura.description}}</td>
+          <td>{{factura.total}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
