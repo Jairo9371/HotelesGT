@@ -77,12 +77,24 @@ class Tipo_Habitacion(models.Model):
 class Habitacion(models.Model):
     """Modelo para guardar las Habitaciones del Hotel"""
 
+    DISPONIBLE = "D"
+    RESERVADO = "R"
+    NO_DISPONIBLE = "N"
+
+    ESTADO_HABITACION = {
+        (DISPONIBLE, "Disponible"),
+        (RESERVADO, "Reservado"),
+        (NO_DISPONIBLE, "No disponible"),
+    }
+
     identificador = models.AutoField(primary_key=True, verbose_name = 'Id')
     hotel_id = models.ForeignKey(Hotel, on_delete = models.PROTECT, verbose_name = 'Hotel')
     tipo_id = models.ForeignKey(Tipo_Habitacion, on_delete = models.PROTECT, verbose_name = 'Tipo')
     description = models.CharField(max_length = 255, null = False, verbose_name = 'Descripción')
     precio = models.DecimalField(max_digits = 12, decimal_places = 2, verbose_name = 'Precio')
     usuario_id = models.ForeignKey(User, on_delete = models.PROTECT, verbose_name = 'Usuario')
+    estado = models.CharField(max_length =1, default = DISPONIBLE , null = True, blank = True, choices = ESTADO_HABITACION, verbose_name = 'Estado' )
+    numero_habitacion = models.IntegerField(blank=True, null = True, verbose_name = 'Número Habitación')    
 
     def __str__(self):
         return '{} - {}'.format(self.description, self.precio)
@@ -112,13 +124,23 @@ class Cliente(models.Model):
 class Reservacion(models.Model):
     """Modelo para guardar las reservaciones de cada clientes del Hotel"""
 
+    ACTIVA = "A"
+    CANCELADA = "C"
+    PAGADA = "P"
+
+    ESTADO_RESERVACION= {
+        (ACTIVA, "Activa"),
+        (CANCELADA, "Cancelada"),
+        (PAGADA, "Pagada"),
+    }
+
     identificador = models.AutoField(primary_key=True, verbose_name = 'Id')
     fecha = models.DateField(auto_now = False, auto_now_add = False, verbose_name = 'Fecha de Reservación')
     cliente_id = models.ForeignKey(Cliente, on_delete = models.PROTECT, verbose_name = 'Cliente')
     hotel_id = models.ForeignKey(Hotel, on_delete = models.PROTECT, verbose_name = 'Hotel')
     description = models.CharField(max_length = 255, verbose_name = 'Descripción')
     usuario_id = models.ForeignKey(User, on_delete = models.PROTECT, verbose_name = 'Usuario')
-    estado = models.CharField(max_length =1, default ='A', null = True, blank = True, verbose_name = 'Estado' )
+    estado = models.CharField(max_length =1, default = ACTIVA, null = True, blank = True, choices = ESTADO_RESERVACION,  verbose_name = 'Estado' )
 
     def __str__(self):  
         return '{} - {}'.format(self.fecha, self.cliente_id)
@@ -147,10 +169,10 @@ class Factura(models.Model):
     """Modelo para guardar las facturas que hace el Hotel"""
 
     identificador = models.AutoField(primary_key=True, verbose_name = 'Id')
-    no_serie = models.CharField(max_length = 15, blank = False, null = False, verbose_name = 'No. Serie')
+    no_serie = models.CharField(max_length = 15, default= "A", blank = False, null = False, verbose_name = 'No. Serie')
     fecha = models.DateField(auto_now = False, auto_now_add = False, verbose_name = 'Fecha de la Factura')
     reservacion_id = models.ForeignKey(Reservacion, on_delete = models.PROTECT, verbose_name = 'Reservación')
-    description = models.CharField(max_length = 255, null = False, verbose_name = 'Descripción')
+    description = models.CharField(max_length = 500, null = False, verbose_name = 'Descripción')
     total = models.DecimalField(max_digits = 12, decimal_places = 2, verbose_name = 'Total')
 
     def __str__(self):

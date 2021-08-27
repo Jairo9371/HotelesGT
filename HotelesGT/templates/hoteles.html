@@ -44,8 +44,8 @@
     <form action="" method="GET">
     <select name = "ciudad" class="form-select" aria-label="Default select example">
       <option selected>Seleccione una Ciudad</option>
-      {% for cuidad in lista_ciudades %}
-      <option value="{{cuidad.identificador}}">{{cuidad.nombre}}</option>
+    {% for ciudad in lista_ciudades %}
+      <option value="{{ciudad.identificador}}">{{ciudad.nombre}}</option>
       {% endfor %}
     </select><br>
     <button type="submit" class="btn btn-secondary btn-sm">Filtrar</button>

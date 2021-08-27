@@ -1,69 +1,184 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel = "stylesheet" type = "text/css" href="{% static 'css/circlebutton.css' %}" />
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>Habitaciones</title>
   </head>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-     
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/hoteles">Hoteles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/habitaciones">Habitaciones</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/clientes">Clientes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/reservaciones">Reservaciones</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/facturas">Facturas</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
   <body>
-    <h1>{{titulo}}</h1>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Hotel</th>
-          <th scope="col">Tipo de Habitación</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Precio</th>
-          <th scope="col">Usuario</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for habitacion in lista_habitacion %}
-        <tr>
-          <th scope="row">{{forloop.counter}}</th>
-          <td>{{habitacion.hotel_id}}</td>
-          <td>{{habitacion.tipo_id}}</td>
-          <td>{{habitacion.description}}</td>
-          <td>{{habitacion.precio}}</td>
-          <td>{{habitacion.usuario_id}}</td>
-        </tr>
-        {% endfor %}
 
-      </tbody>
-    </table>
+    {%include 'mensajes.html'%}
+
+
+    <h1>{{titulo}}</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+       
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/hoteles">Hoteles</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/habitaciones">Habitaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/clientes">Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/reservaciones">Reservaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/facturas">Facturas</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+          <div class="container">
+            <div class="row">
+              <div class="col-10">
+          <form action = "" method = "GET">
+          <select name = "hotel_seleccionado" class="form-select" aria-label="Default select example">
+            <option selected>Seleccione un Hotel</option>
+            {% for h in lista_hoteles%}
+            <option value="{{h.identificador}}">{{h.nombre}}</option>
+          {% endfor %}
+          </select><br>
+        </div>
+          <div class="col-2">
+          <button type="submit" class="btn btn-primary btn-sm">Mostrar Habitaciones</button>
+          </div>
+        </form><br>
+    </div>
+</div>
+
+      {{nombre_hotel.nombre}}
+    <div class = "container">
+      <div class = "row">
+        {% for data in lista_habitacion %}
+        <div class = "col-1">
+        <button type="button" 
+        {% if data.estado == 'D' %} class="btn btn-success btn-circle btn-lg" {% endif %}
+        {% if data.estado == 'N' %} class="btn btn-danger btn-circle btn-lg" {% endif %} 
+        {% if data.estado == 'R' %} class="btn btn-primary btn-circle btn-lg" {% endif %} 
+        data-bs-toggle="modal" data-bs-target="#habitacion{{data.identificador}}">{{data.numero_habitacion}}</button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="habitacion{{data.identificador}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle Habitación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class = "container">
+                  <div class = "row">
+                    <div class="col-6">
+                      <label for="numero_habitacion" class="form-label">Número Habitación:</label>
+                      <input readonly value = "{{data.numero_habitacion}}" type="text" class="form-control" id="numero_habitacion" name = "numero_habitacion">
+                    </div>
+                    <div class="col-6">
+                      <label for="precio" class="form-label">Precio:</label>
+                      <input readonly value = "{{data.precio}}" type="text" class="form-control" id="precio" name = "precio">
+                    </div>
+                    <div class="col-12">
+                      <label for="description" class="form-label">Descripción:</label>
+                      <input readonly value = "{{data.description}}" type="text" class="form-control" id="description" name = "description">
+                    </div>
+                    <div class="col-12">
+                      <label for="hotel_id" class="form-label">Hotel:</label>
+                      <input readonly value = "{{data.hotel_id}}" type="text" class="form-control" id="hotel_id" name = "hotel_id">
+                    </div>
+                    <div class="col-6">
+                      <label for="estado" class="form-label">Estado:</label>
+                      <input readonly value = "{{data.get_estado_display}}" type="text" class="form-control" id="estado" name = "estado">
+                    </div>
+                    <div class="col-6">
+                      <label for="tipo_id" class="form-label">Tipo Habitación:</label>
+                      <input readonly value = "{{data.tipo_id}}" type="text" class="form-control" id="tipo_id" name = "tipo_id">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                                  <!-- Button trigger modal -->
+                  {% if data.estado == 'D'%}
+                  <button type="button" data-bs-dismiss = "modal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_register{{data.identificador}}">
+                    Añadir Reservación
+                  </button>
+                  {% endif %}
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="modal_register{{data.identificador}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reservación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action = "" method = "POST">
+                  {% csrf_token %}
+                      <div class="form-group">
+                        <label for="fecha_ingreso">Fecha de Ingreso:</label>
+                        <input required type="date" class="form-control" name = "fecha_ingreso" id="fecha_ingreso">
+                      </div><br>
+                      <div class="form-group">
+                        <label for="fecha_salida">Fecha de Salida:</label>
+                        <input required type="date" class="form-control" name = "fecha_salida" id="fecha_salida">
+                      </div><br>
+                      <div class="form-group">
+                        <label for="cliente">Cliente:</label>
+                        <select name = "cliente" class="form-select" aria-label="Default select example">
+                          <option selected>Seleccione un Cliente</option>
+                          {% for c in lista_clientes %}
+                          <option value="{{c.identificador}}">{{c.nombre}} {{c.apellido}} </option>
+                          {% endfor %}
+                        </select>
+                      </div><br>
+                      <div class="form-group">
+                        <label for="description">Descripción:</label>
+                        <input  type="text" class="form-control" name = "description" id="description" >
+                      </div><br>
+                      <div class="form-group">
+                        <label for="nombre_reservacion">Nombre de Reservación:</label>
+                        <input  type="text" class="form-control" name = "nombre_reservacion" id="nombre_reservacion" >
+                      </div><br>
+
+                      <input  type="hidden" class="form-control" name = "habitacion" value="{{data.identificador}}">
+                      <input  type="hidden" class="form-control" name = "añadir_reservacion" value="añadir_reservacion">
+                      <input  type="hidden" class="form-control" name = "hotel" value="{{nombre_hotel.identificador}}">
+
+                  </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Reservar</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+
+    
 
     <!-- Optional JavaScript; choose one of the two! -->
 

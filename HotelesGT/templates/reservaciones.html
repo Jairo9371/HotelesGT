@@ -1,4 +1,5 @@
 <!doctype html>
+{% load mis_filter %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -10,35 +11,39 @@
 
     <title>Reservaciones</title>
   </head>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-     
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/hoteles">Hoteles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/habitaciones">Habitaciones</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/clientes">Clientes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/reservaciones">Reservaciones</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/facturas">Facturas</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
   <body>
+
+    {% include 'mensajes.html' %}
+    
     <h1>{{titulo}}</h1>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+       
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/hoteles">Hoteles</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/habitaciones">Habitaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/clientes">Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/reservaciones">Reservaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/facturas">Facturas</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -47,21 +52,255 @@
           <th scope="col">Cliente</th>
           <th scope="col">Hotel</th>
           <th scope="col">Descripción</th>
-          <th scope="col">Usuario</th>
           <th scope="col">Estado</th>
+          <th scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {% for reservacion in lista_reservaciones %}
+        {% for r in lista_reservaciones %}
         <tr>
           <th scope="row">{{forloop.counter}}</th>
-          <td>{{reservacion.fecha}}</td>
-          <td>{{reservacion.cliente_id}}</td>
-          <td>{{reservacion.hotel_id}}</td>
-          <td>{{reservacion.description}}</td>
-          <td>{{reservacion.usuario_id}}</td>
-          <td>{{reservacion.estado}}</td>
+          <td>{{r.reservacion_id.fecha}}</td>
+          <td>{{r.reservacion_id.cliente_id}}</td>
+          <td>{{r.reservacion_id.hotel_id}}</td>
+          <td>{{r.reservacion_id.description}}</td>
+          <td>{{r.reservacion_id.get_estado_display}}</td>
+          <td>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservacion{{r.identificador}}">
+              Ver detalle
+          </button>
+          
+          <!-- Primer Modal -->
+          <div class="modal fade" id="reservacion{{r.identificador}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Detalle de Reservación</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class = "container">
+                    <div class = "row">
+                      <div class="col-12">
+                        <label for="fecha_ingreso" class="form-label">Cliente:</label>
+                        <input readonly value = "{{r.reservacion_id.cliente_id}}" type = "text" class="form-control" id="fecha_ingreso" name = "fecha_ingreso">
+                      </div>
+                      <div class="col-6">
+                        <label for="fecha_ingreso" class="form-label">No de Reservación:</label>
+                        <input readonly value = "{{r.identificador}}" type = "text" class="form-control" id="fecha_ingreso" name = "fecha_ingreso">
+                      </div>
+                      <div class="col-6">
+                        <label for="fecha_ingreso" class="form-label">Fecha de Reservación:</label>
+                        <input readonly value = "{{r.reservacion_id.fecha}}" type = "text" class="form-control" id="fecha_ingreso" name = "fecha_ingreso">
+                      </div>
+                      <div class="col-6">
+                        <label for="fecha_ingreso" class="form-label">Fecha Ingreso:</label>
+                        <input readonly value = "{{r.fecha_ingreso}}" type = "text" class="form-control" id="fecha_ingreso" name = "fecha_ingreso">
+                      </div>
+                      <div class="col-6">
+                        <label for="fecha_salida" class="form-label">Fecha salida:</label>
+                        <input readonly value = "{{r.fecha_salida}}" type = "text" class="form-control" id="fecha_salida" name = "fecha_salida">
+                      </div>
+                      <div class="col-12">
+                        <label for="reservacion" class="form-label">Nombre Reservación:</label>
+                        <input readonly value = "{{r.nombre_reservacion}}" type = "text" class="form-control" id="reservacion_id" name = "reservacion_id">
+                      </div>
+                      <div class="col-6">
+                        <label for="reservacion_id" class="form-label">Número de Habitación:</label>
+                        <input readonly value = "{{r.habitacion_id.numero_habitacion}}" type = "text" class="form-control" id="reservacion_id" name = "reservacion_id">
+                      </div>
+                      <div class="col-6">
+                        <label for="reservacion_id" class="form-label">Tipo de Habitación:</label>
+                        <input readonly value = "{{r.habitacion_id.tipo_id}}" type = "text" class="form-control" id="reservacion_id" name = "reservacion_id">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  <div class="modal-footer">
+                    <div class = "container">
+                      <div class = "row">
+                        <div class="col-3">
+                          {% if r.reservacion_id.estado == 'A' %}
+                        <button type="button" data-bs-dismiss = "modal" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_factura{{r.reservacion_id.identificador}}">
+                          Facturar
+                        </button>
+                        </div>
+                        <div class="col-3">
+                        <button type="button" data-bs-dismiss = "modal" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal_modificar{{r.reservacion_id.identificador}}">
+                          Modificar
+                        </button>
+                        </div>
+                        <div class="col-6">
+                          <form action = "" method = "GET">
+                            <input type = "hidden" class="form-control" name = "reservacion_id" value="{{r.reservacion_id.identificador}}">
+                            <button type="submit" class="btn btn-danger">
+                          Cancelar Reservación</button>
+                        </div>
+                       </form>
+                      </div>
+                      {% endif %}
+                    </div>
+                </div>
+        </div>
+      </div>
+    </div>
+        </td>
         </tr>
+          <!-- Fin Primer Modal -->
+
+          <!-- Segundo Modal -->
+
+        <div class="modal fade" id="modal_modificar{{r.reservacion_id.identificador}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar Reservación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class = "container">
+                  <div class = "row">
+                    <div class="col-12">
+                      <form action = "" method = "POST">
+                      {% csrf_token %}
+                      <label for="cliente" class="form-label">Cliente:</label>
+                      <input readonly value = "{{r.reservacion_id.cliente_id}}" type = "text" class="form-control" id="cliente" name = "cliente">
+                    </div>
+                    <div class="col-6">
+                      <label for="numero_reservacion" class="form-label">No de Reservación:</label>
+                      <input readonly value = "{{r.reservacion_id.identificador}}" type = "text" class="form-control" id="numero_reservacion" name = "numero_reservacion">
+                    </div>
+                    <div class="col-6">
+                      <label for="fecha_ingreso" class="form-label">Fecha de Reservación:</label>
+                      <input readonly value = "{{r.reservacion_id.fecha}}" type = "text" class="form-control" id="fecha_ingreso" name = "fecha_ingreso">
+                    </div>
+                    <div class="col-6">
+                      <label for="fecha_ingreso" class="form-label">Fecha Ingreso:</label>
+                      <input  value = "{{r.fecha_ingreso|date:'Y-m-d'}}" type = "date" class="form-control" id="fecha_ingreso" name = "fecha_ingreso">
+                    </div>
+                    <div class="col-6">
+                      <label for="fecha_salida" class="form-label">Fecha salida:</label>
+                      <input  value = "{{r.fecha_salida|date:'Y-m-d'}}" type = "date" class="form-control" id="fecha_salida" name = "fecha_salida">
+                    </div>
+                    <div class="col-12">
+                      <label for="nombre_reservacion" class="form-label">Nombre Reservación:</label>
+                      <input  value = "{{r.nombre_reservacion}}" type = "text" class="form-control" id="nombre_reservacion" name = "nombre_reservacion">
+                    </div>
+                    <div class="col-6">
+                      <label for="numero_habitacion" class="form-label">Número de Habitación:</label>
+                      <input  value = "{{r.habitacion_id.numero_habitacion}}" type = "text" class="form-control" id="numero_habitacion" name = "numero_habitacion">
+                    </div>
+                    <div class="col-6">
+                      <label for="tipo_habitacion" class="form-label">Tipo de Habitación:</label>
+                      <input readonly value = "{{r.habitacion_id.tipo_id}}" type = "text" class="form-control" id="tipo_habitacion" name = "tipo_habitacion">
+                    </div>
+                    
+                    <input  type="hidden" class="form-control" name = "modificar_reservacion" value = "modificar_reservacion">
+                    <input  type="hidden" class="form-control" name = "identificador" value = "{{r.identificador}}">
+                  </div>
+                </div>
+              </div>
+                    <div class="modal-footer">
+                    <div class = "container">
+                    <div class = "row">
+                      
+                      <div class="col-12">
+                      <button type="submit" data-bs-dismiss = "modal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_modificar{{r.reservacion_id.identificador}}">
+                        Guardar Cambios
+                      </button>
+                    </form>
+                      </div> 
+                    </div>
+                  </div>
+              </div>
+      </div>
+    </div>
+  </div>
+          <!-- Fin Segundo Modal -->
+
+          <!-- Tercer Modal -->
+
+        <div class="modal fade" id="modal_factura{{r.reservacion_id.identificador}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Factura Reservación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class = "container">
+                  <div class = "row">
+                      <form action = "" method = "POST">
+                      {% csrf_token %}
+                    <div class="col-6">
+                      <label for="numero_reservacion" class="form-label">No de Reservación:</label>
+                      <input readonly value = "{{r.reservacion_id.identificador}}" type = "text" class="form-control" id="numero_reservacion" name = "numero_reservacion">
+                    </div>
+                    <div class="col-6">
+                      <label for="fecha_ingreso" class="form-label">Fecha de Reservación:</label>
+                      <input readonly value = "{{r.reservacion_id.fecha}}" type = "text" class="form-control" >
+                    </div>
+                    <div class="col-6">
+                      <label for="fecha_ingreso" class="form-label">Fecha Ingreso:</label>
+                      <input readonly value = "{{r.fecha_ingreso|date:'Y-m-d'}}" type = "date" class="form-control" >
+                    </div>
+                    <div class="col-6">
+                      <label for="fecha_salida" class="form-label">Fecha Salida:</label>
+                      <input readonly value = "{{r.fecha_salida|date:'Y-m-d'}}" type = "date" class="form-control" >
+                    </div>
+                    <div class="col-6">
+                      <label for="numero_habitacion" class="form-label">Número Habitación:</label>
+                      <input readonly value = "{{r.habitacion_id.numero_habitacion}}" type = "text" class="form-control" >
+                    </div>
+            
+                    <div class="col-6">
+                      <label for="tipo_habitacion" class="form-label">Tipo de Habitación:</label>
+                      <input readonly value = "{{r.habitacion_id.tipo_id}}" type = "text" class="form-control"><br>
+                    </div>
+
+                    <label for="" class="form-label">DATOS DE LA FACTURA:</label><br>
+
+                    <div class="col-6">
+                      <label for="cliente" class="form-label">Cliente:</label>
+                      <input readonly value = "{{r.reservacion_id.cliente_id}}" type = "text" class="form-control" >
+                    </div>
+                    <div class="col-6">
+                      <label for="nit" class="form-label">NIT:</label>
+                      <input readonly value = "{{r.reservacion_id.cliente_id.nit}}" type = "text" class="form-control" >
+                    </div>
+                    <div class="col-6">
+                      <label for="direccion" class="form-label">Dirección:</label>
+                      <input readonly value = "{{r.reservacion_id.cliente_id.direccion}}" type = "text" class="form-control" >
+                    </div>
+                    <div class="col-6">
+                      <label for="total" class="form-label">Total a Pagar: </label>
+                      <input readonly value = "{{r.fecha_ingreso|dias:r.fecha_salida|multiplicar:r.habitacion_id.precio}}" type = "text" class="form-control" id= "total" name="total">
+                    </div>
+                    <div class="col-12">
+                      <label for="description" class="form-label">Descripción de la Factura:</label>
+                      <input  value = "" type = "text" class="form-control" id= "description" name="description">
+                    </div>
+                    <input  type="hidden" class="form-control" name = "facturar" value = "facturar">
+                  </div>
+                </div>
+              </div>
+                    <div class="modal-footer">
+                    <div class = "container">
+                    <div class = "row">
+                      <div class="col-6">
+                      <button type="submit" data-bs-dismiss = "modal" class="btn btn-primary" >
+                        Generar Factura
+                      </button>
+                    </form>
+                      </div> 
+                    </div>
+                  </div>
+              </div>
+      </div>
+    </div>
+  </div>
+          <!-- Fin Tercer Modal -->
+
         {% endfor %}
 
       </tbody>

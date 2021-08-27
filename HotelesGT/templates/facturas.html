@@ -1,4 +1,5 @@
 <!doctype html>
+{% load mis_filter %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -10,6 +11,8 @@
 
     <title>Facturas</title>
   </head>
+  <h1>{{titulo}}</h1>
+
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
      
@@ -38,27 +41,82 @@
     </div>
   </nav>
   <body>
-    <h1>{{titulo}}</h1>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">#</th>
           <th scope="col">No.Serie</th>
+          <th scope="col">Número</th>
           <th scope="col">Fecha</th>
-          <th scope="col">Reservación</th>
           <th scope="col">Descripción</th>
           <th scope="col">Total</th>
+          <th scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {% for factura in lista_facturas %}
+        {% for f in lista_facturas %}
         <tr>
-          <th scope="row">{{forloop.counter}}</th>
-          <td>{{factura.no_serie}}</td>
-          <td>{{factura.fecha}}</td>
-          <td>{{factura.reservacion_id}}</td>
-          <td>{{factura.description}}</td>
-          <td>{{factura.total}}</td>
+          <th scope="row">{{f.no_serie}}</th>
+          <td>{{f.identificador}}</td>
+          <td>{{f.fecha}}</td>
+          <td>{{f.description}}</td>
+          <td>{{f.total}}</td>
+          <td>
+
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#factura{{f.identificador}}">
+              Ver detalle
+          </button>
+          
+          <!-- Primer Modal -->
+          <div class="modal fade" id="factura{{f.identificador}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Detalle de Factura</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class = "container">
+                    <div class = "row">
+                      <div class="col-6">
+                        <label for="fecha_ingreso" class="form-label">Cliente:</label>
+                        <input readonly value = "{{f.reservacion_id.cliente_id}}" type = "text" class="form-control" >
+                      </div>
+                      <div class="col-6">
+                        <label for="habitacion" class="form-label">Número de Habitación:</label>
+                        <input readonly value = "{{f.reservacion_id | habitacion}}" type = "text" class="form-control" >
+                      </div>
+                      <div class="col-6">
+                        <label for="fecha_ingreso" class="form-label">Fecha Ingreso:</label>
+                        <input readonly value = "{{f.reservacion_id | fecha_ingreso}}" type = "text" class="form-control" >
+                      </div>
+                      <div class="col-6">
+                        <label for="fecha_salida" class="form-label">Fecha salida:</label>
+                        <input readonly value = "{{f.reservacion_id | fecha_salida}}" type = "text" class="form-control" >
+                      </div>
+                      <div class="col-12">
+                        <label for="Descripción" class="form-label">Descripción</label>
+                        <input readonly value = "{{f.reservacion_id.description}}" type = "text" class="form-control" >
+                      </div>
+                      
+                      <div class="col-6">
+                        <label for="estado" class="form-label">Estado:</label>
+                        <input readonly value = "{{f.reservacion_id.get_estado_display}}" type = "text" class="form-control" >
+                      </div>
+                      <div class="col-6">
+                        <label for="total" class="form-label">Total Pagado:</label>
+                        <input readonly value = "{{f.total}}" type = "text" class="form-control" >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+        </div>
+      </div>
+    </div>
+
+          </td>
         </tr>
         {% endfor %}
 
